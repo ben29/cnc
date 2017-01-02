@@ -3,7 +3,7 @@ from socket import socket, AF_INET, SOCK_STREAM ,SOL_SOCKET,SO_REUSEADDR,gethost
 from thread import start_new_thread
 from os import system,path
 from time import sleep
-from sys import exit as exitapp
+from sys import exit
 
 # settings
 host = ''
@@ -18,7 +18,8 @@ try:
     sock.bind((host, port))
 except error as msg:
     print "Socket Error: %s" % msg
-    exitapp()
+    exit()
+
 sock.listen(max_connections)
 
 def GetConnections():
@@ -138,8 +139,12 @@ def ShellAcsess():
     print "Remmber write Enter to exit!"
     while True:
         commandtosend = raw_input("-> ")
+        if len(commandtosend) == 0:
+            print "you didn't type command!"
+            continue
         if (commandtosend == "exit"):
             print "Exiting...."
+            connections.remove(connections[inp - 1])
             EnterToMenu()
         try:
             connections[inp - 1][0].send(commandtosend)
